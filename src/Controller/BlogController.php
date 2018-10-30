@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Article;
 use App\Repository\ArticleRepository;
+use App\Form\ArticleType;
 use Doctrine\Common\Persistence\ObjectManager;
 
 class BlogController extends AbstractController
@@ -43,11 +44,7 @@ class BlogController extends AbstractController
         if (!$article)
             $article = new Article();
 
-        $form = $this->createFormBuilder($article)
-                     ->add('title', TextType::class)
-                     ->add('content', TextareaType::class)
-                     ->add('image', TextType::class)
-                     ->getForm();
+        $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -59,7 +56,8 @@ class BlogController extends AbstractController
         }
 
         return $this->render('blog/create.html.twig', [
-            'formArticle' => $form->createView()
+            'formArticle' => $form->createView(),
+            'editMode' => $article->getId() !== null
         ]);
     }
     /**
