@@ -6,8 +6,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Article;
 use App\Repository\ArticleRepository;
+use Doctrine\Common\Persistence\ObjectManager;
 
 class BlogController extends AbstractController
 {
@@ -34,26 +36,27 @@ class BlogController extends AbstractController
     }
     /**
      * @Route("/blog/new", name="create")
+     * @Route("/blog/{id}/edit", name="edit")
      */
-    public function create() {
-        $article = new Article();
+    public function form(Article $article = null, Request $request, ObjectManager $manager) {
+
+        if (!$article)
+            $article = new Article();
+
         $form = $this->createFormBuilder($article)
-                     ->add('title', TextType::class, [
-                         'attr' => [
-                             'placeholder' => "Titre de l'article"
-                         ]
-                     ])
-                     ->add('content', TextareaType::class, [
-                        'attr' => [
-                            'placeholder' => "Contenu de l'article"
-                        ]
-                    ])
-                     ->add('image', TextType::class, [
-                        'attr' => [
-                            'placeholder' => "Adresse de l'image"
-                        ]
-                    ])
+                     ->add('title', TextType::class)
+                     ->add('content', TextareaType::class)
+                     ->add('image', TextType::class)
                      ->getForm();
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if (!$article->getId())
+                $article->setCreateAt(new \Datetime());
+            $manager->persist($article);
+            $manager->flush();
+            return $this->redirectToRoute('show', ['id' => $article->getId()]);
+        }
 
         return $this->render('blog/create.html.twig', [
             'formArticle' => $form->createView()
