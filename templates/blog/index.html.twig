@@ -5,35 +5,16 @@
 {% block body %}
 
 <section class="articles">
-    <article>
-        <h2>Titre de l'article</h2>
-        <div class="metadata">ecrit le 30/05/2018 à 19:00 dans la catégorie politique</div>
-        <div class="content">
-            <img src="http://placehold.it/400x200" alt="">
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste repellat ea eligendi consequatur ex optio?</p>
-            <p>Neque iure similique nemo assumenda molestiae? Soluta similique ipsum quasi possimus quis neque amet rem.</p>
-            <a href="{{ path('show') }}" class="btn btn-primary">Lire la suite</a>
-        </div>
-    </article>
-    <article>
-        <h2>Titre de l'article</h2>
-        <div class="metadata">ecrit le 30/05/2018 à 19:00 dans la catégorie politique</div>
-        <div class="content">
-            <img src="http://placehold.it/400x200" alt="">
-            <p>Saepe facere quas temporibus eaque quo quaerat. Quae officia cum eos, repellat veritatis saepe velit?</p>
-            <p>Placeat dolorem fugiat, ab asperiores amet a alias? Consequuntur vitae ullam dignissimos vero eveniet asperiores?</p>
-            <a href="{{ path('show') }}" class="btn btn-primary">Lire la suite</a>
-        </div>
-    </article>
-    <article>
-        <h2>Titre de l'article</h2>
-        <div class="metadata">ecrit le 30/05/2018 à 19:00 dans la catégorie politique</div>
-        <div class="content">
-            <img src="http://placehold.it/400x200" alt="">
-            <p>Cupiditate esse, impedit, quos voluptatibus et magnam facilis magni hic illum necessitatibus voluptas ducimus fugit!</p>
-            <p>Dolorum ratione laborum magnam, corporis incidunt minima tempora dolore illum repellendus, sit rerum eveniet deserunt?</p>
-            <a href="{{ path('show') }}" class="btn btn-primary">Lire la suite</a>
-        </div>
-    </article>
+    {% for article in articles %}
+        <article>
+            <h2> {{ article.title }} </h2>
+            <div class="metadata">ecrit le {{ article.createAt | date('d/m/Y') }} à {{ article.createAt | date('H:i') }}  dans la catégorie politique</div>
+            <div class="content">
+                <img src="{{ article.image }}" alt="">
+                <p>{{ article.content }}</p>
+                <a href="{{ path('show', article.id) }}" class="btn btn-primary">Lire la suite</a>
+            </div>
+        </article>
+    {% endfor %}
 </section>
 {% endblock %}
