@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% if editMode == false %}
+        <h1>Creation d'un nouvel article</h1>
+    {% else %}
+        <h1>Modification d'un article existant</h1>
+    {% endif %}
+    {{ form_start(formArticle) }}
+    
+    {{ form_row(formArticle.title, {'attr':{'placeholder': "Titre de l'article"}}) }}
+    {{ form_row(formArticle.content, {'attr':{'placeholder': "Contenu de l'article"}}) }}
+    {{ form_row(formArticle.image, {'attr':{'placeholder': "Lien de l'image de l'article"}}) }}
+    {% if editMode == false %}
+        <button type="submit" class="btn btn-success">Ajouter un article</button>
+    {% else %}
+        <button type="submit" class="btn btn-success">Modifier l'article</button>
+    {% endif %}
+    {{ form_end(formArticle) }}
+
+{% endblock %}
