@@ -12,6 +12,7 @@
 </article>
 <hr>
 <section id="commentaires">
+    <h2>{{ article.comments | length }} commentaires</h2>
     {% for comment in article.comments %}
     <div class="comment">
         <div class="row">
@@ -24,5 +25,11 @@
         </div>
     </div>
     {% endfor %}
+
+    {{ form_start(commentForm) }}
+    {{ form_row(commentForm.author, {'attr':{'placeholder': "Votre nom"}}) }}
+    {{ form_row(commentForm.content, {'attr':{'placeholder': "Votre commentaire"}}) }}
+    <button type="submit">Commenter</button>
+    {{ form_end(commentForm) }}
 </section>
 {% endblock body %}
